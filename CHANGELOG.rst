@@ -1,3 +1,10 @@
 =========
 Changelog
 =========
+
+Version 1.1.0
+-------------
+
+- f03b3e1 Update README.rst (#7)
+- 7376a7e Add CODEOWNERS file with etos maintainers (#6)
+- 19fa706 Update README.rst (#5)
