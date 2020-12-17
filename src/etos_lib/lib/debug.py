@@ -18,6 +18,7 @@
 DEPRECATION WARNING: Some parameters which don't belong here will be removed.
 """
 import os
+from pathlib import Path
 from collections import deque
 
 
@@ -35,6 +36,16 @@ class Debug:
     def default_secret_path(self):
         """Path to k8s secrets."""
         return os.getenv("ETOS_SECRET_PATH", "/etc/")
+
+    @property
+    def default_log_path(self):
+        """"Default log path."""
+        path = os.getenv("ETOS_LOG_PATH")
+        if path is None:
+            path = Path.home().joinpath("logs/log.json")
+        else:
+            path = Path(path)
+        return path
 
     @property
     def disable_sending_events(self):
