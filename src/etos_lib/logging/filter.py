@@ -43,6 +43,8 @@ class EtosFilter(logging.Filter):  # pylint:disable=too-few-public-methods
         :return: True
         :rtype: bool
         """
+        if not hasattr(record, "identifier"):
+            record.identifier = "Unknown"
         record.application = self.application
         record.version = self.version
         record.environment = self.environment

@@ -56,6 +56,8 @@ def setup_logging(
     """
     Config().set("log_filter", EtosFilter(application, version, environment))
     logging.config.fileConfig(filename, defaults={"logfilename": output})
+    root_logger = logging.getLogger()
+    root_logger.addFilter(Config().get("log_filter"))
 
 
 def get_logger(name, identifier):
