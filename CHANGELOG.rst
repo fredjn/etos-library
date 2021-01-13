@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Version 1.8.0
+-------------
+
+- 96d02ae Make the logging module more configurable and easier to use (#9)
+
 Version 1.7.0
 -------------
 
