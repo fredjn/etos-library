@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Version 1.9.0
+-------------
+
+- 37ce7e1 Update Eiffellib version to latest. (#10)
+
 Version 1.8.0
 -------------
 
