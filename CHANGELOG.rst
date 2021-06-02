@@ -5,6 +5,11 @@ Changelog
 Version 1.16.0
 --------------
 
+- 55e7db2 Adding changelog for version 1.16.0
+
+Version 1.16.0
+--------------
+
 
 Version 1.15.0
 --------------
