@@ -2,6 +2,14 @@
 Changelog
 =========
 
+Version 1.16.0
+--------------
+
+- 1b87173 Update CHANGELOG.rst
+- 1300ef6 Adding changelog for version 1.16.0
+- 01fdf6a Adding changelog for version 1.16.0
+- 55e7db2 Adding changelog for version 1.16.0
+
 Version 1.15.0
 --------------
 
