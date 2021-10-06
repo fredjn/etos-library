@@ -2,6 +2,11 @@
 Changelog
 =========
 
+Version 1.23.0
+--------------
+
+- 965230e Set routing key to None in eiffellib (#11)
+
 Version 1.22.0
 --------------
 
