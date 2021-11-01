@@ -1,4 +1,4 @@
-# Copyright 2020 Axis Communications AB.
+# Copyright 2020-2021 Axis Communications AB.
 #
 # For a full list of individual contributors, please see the commit history.
 #
@@ -67,6 +67,7 @@ class Events:
             event.data.add(key, value)
         event.validate()
         self.debug.events_published.append(event)
+        event.tag = self.debug.routing_key_tag
         if not self.debug.disable_sending_events:
             self.publisher.send_event(event)
         return event
