@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: etos-library
+  annotations:
+    github.com/project-slug: fredjn/etos-library
+spec:
+  type: library
+  lifecycle: production
+  owner: fredjn
