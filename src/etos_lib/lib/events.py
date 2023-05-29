@@ -162,7 +162,9 @@ class Events:
             and optional.get("host") is None
             and optional.get("uri") is None
         ):
-            raise Exception("At least one of 'host', 'image' or 'uri' must be provided")
+            raise ValueError(
+                "At least one of 'host', 'image' or 'uri' must be provided"
+            )
         links = links if links is not None else {}
         data = {"name": name}
         data.update(**optional)
@@ -240,7 +242,7 @@ class Events:
         :type optional: dict
         """
         if optional.get("batches") is None and optional.get("batchesUri") is None:
-            raise Exception(
+            raise ValueError(
                 "At least one of 'batches' or 'batchesUri' must be provided"
             )
         links = links if links is not None else {}
