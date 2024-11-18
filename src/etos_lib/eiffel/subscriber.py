@@ -93,6 +93,12 @@ class TracingRabbitMQSubscriber(RabbitMQSubscriber):
             error_callback=error_callback,
         )
 
+    def callback_error(self, delivery_tag, exception):
+        _LOG.info(
+            "".join(traceback.format_exception(type(exception), exception, exception.__traceback__))
+        )
+        return super().callback_error(delivery_tag, exception)
+
     def _tracer_call(
         self, body: bytes, method: Basic.Deliver, properties: BasicProperties
     ) -> tuple[bool, bool]:
