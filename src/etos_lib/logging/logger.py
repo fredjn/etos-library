@@ -34,7 +34,14 @@ from pathlib import Path
 import threading
 import logging
 import logging.config
+from typing import Literal
 from yaml import load, SafeLoader
+
+from opentelemetry.sdk._logs import LoggingHandler, LoggerProvider
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+
 from etos_lib.logging.filter import EtosFilter
 from etos_lib.logging.formatter import EtosLogFormatter
 from etos_lib.logging.rabbitmq_handler import RabbitMQHandler
@@ -150,7 +157,36 @@ def setup_rabbitmq_logging(log_filter):
     root_logger.addHandler(rabbit_handler)
 
 
-def setup_logging(application, version, environment, config_file=DEFAULT_CONFIG):
+def setup_otel_logging(
+    log_filter: EtosFilter,
+    resource,
+    log_level: int = logging.INFO,
+) -> None:
+    """Set up OpenTelemetry logging.
+
+    :param log_filter: Logfilter to add to stream handler.
+    :type log_filter: :obj:`EtosFilter`
+    """
+    logger_provider = LoggerProvider(resource)
+    logger_provider.add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter()))
+    otel_log_handler = LoggingHandler(logger_provider=logger_provider)
+
+    otel_log_handler.setFormatter(EtosLogFormatter())
+    otel_log_handler.addFilter(log_filter)
+    otel_log_handler.setLevel(log_level)
+
+    logging.getLogger().addHandler(otel_log_handler)
+
+    LoggingInstrumentor().instrument(set_logging_format=False)
+
+
+def setup_logging(
+    application,
+    version,
+    environment,
+    otel_resource=None,
+    config_file=DEFAULT_CONFIG,
+):
     """Set up basic logging.
 
     :param application: Name of application to setup logging for.
@@ -182,6 +218,8 @@ def setup_logging(application, version, environment, config_file=DEFAULT_CONFIG)
     if logging_config.get("file"):
         setup_file_logging(logging_config.get("file"), log_filter)
     setup_rabbitmq_logging(log_filter)
+    if otel_resource:
+        setup_otel_logging(log_filter, otel_resource)
 
 
 def close_rabbit(rabbit):
