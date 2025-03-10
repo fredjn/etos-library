@@ -189,7 +189,7 @@ def setup_otel_logging(
 def setup_logging(
     application: str,
     version: str,
-    environment: str,  # This is kept to maintain API compatibility
+    environment: str,  # pylint: disable=unused-argument # This is kept to maintain backward compatibility
     otel_resource: Resource = None,
     config_file: Path = DEFAULT_CONFIG,
 ) -> None:
