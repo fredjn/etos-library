@@ -15,6 +15,7 @@
 # limitations under the License.
 """ETOS filter."""
 import logging
+import threading
 
 from opentelemetry import trace
 
@@ -35,25 +36,22 @@ def get_current_otel_trace_id() -> str:
 class EtosFilter(logging.Filter):  # pylint:disable=too-few-public-methods
     """Filter for adding extra application specific data to log messages."""
 
-    def __init__(self, application, version, environment, local):
+    def __init__(self, application: str, version: str, local: threading.local) -> None:
         """Initialize with a few ETOS application fields.
 
         :param application: Name of application.
         :type application: str
         :param version: Version of application.
         :type version: str
-        :param environment: In which environment is this executing.
-        :type environment: str
         :param local: Thread-local configuration information.
         :type local: :obj:`threading.local`
         """
         self.application = application
         self.version = version
-        self.environment = environment
         self.local = local
         super().__init__()
 
-    def filter(self, record):
+    def filter(self, record: logging.LogRecord) -> bool:
         """Add contextual data to log record.
 
         :param record: Log record to add data to.
@@ -63,7 +61,6 @@ class EtosFilter(logging.Filter):  # pylint:disable=too-few-public-methods
         """
         record.application = self.application
         record.version = self.version
-        record.environment = self.environment
         record.opentelemetry_trace_id = get_current_otel_trace_id()
 
         # Add each thread-local attribute to record.

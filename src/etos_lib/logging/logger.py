@@ -189,7 +189,7 @@ def setup_otel_logging(
 def setup_logging(
     application: str,
     version: str,
-    environment: str,
+    environment: str,  # This is kept to maintain API compatibility
     otel_resource: Resource = None,
     config_file: Path = DEFAULT_CONFIG,
 ) -> None:
@@ -208,7 +208,7 @@ def setup_logging(
         config = load(yaml_file, Loader=SafeLoader)
     logging_config = config["logging"]
 
-    log_filter = EtosFilter(application, version, environment, FORMAT_CONFIG)
+    log_filter = EtosFilter(application, version, FORMAT_CONFIG)
 
     # Create a default logger which will not propagate messages
     # to the root logger. This logger will create records for all
