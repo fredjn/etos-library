@@ -81,8 +81,8 @@ class Shutdown(UserEvent):
     def __str__(self) -> str:
         """Return the string representation of a shutdown."""
         return (
-            f"Result(conclusion={self.data.conclusion}, "
-            f"verdict={self.data.verdict}, description={self.data.description})"
+            f"Result(conclusion={self.data.conclusion.value}, "
+            f"verdict={self.data.verdict.value}, description={self.data.description})"
         )
 
 

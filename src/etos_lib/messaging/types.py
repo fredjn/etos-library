@@ -59,11 +59,30 @@ class Log(BaseModel):
     )
 
 
+class Conclusion(Enum):
+    """Conclusion of a test run."""
+
+    SUCCESSFUL = "Successful"
+    FAILED = "Failed"
+    ABORTED = "Aborted"
+    TIMED_OUT = "TimedOut"
+    INCONCLUSIVE = "Inconclusive"
+
+
+class Verdict(Enum):
+    """Verdict of a test run."""
+
+    PASSED = "Passed"
+    FAILED = "Failed"
+    INCONCLUSIVE = "Inconclusive"
+    NONE = "None"
+
+
 class Result(BaseModel):
     """Shutdown result."""
 
-    conclusion: str
-    verdict: str
+    conclusion: Conclusion
+    verdict: Verdict
     description: str = ""
 
 
