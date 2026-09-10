@@ -19,7 +19,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Annotated
 
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, StringConstraints
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, StringConstraints, model_serializer
 
 
 class ServiceHealth(Enum):
@@ -49,14 +49,19 @@ class Log(BaseModel):
     message: str
     level: Annotated[str, StringConstraints(to_lower=True)] = Field("info", alias="levelname")
     name: str
-    # The datestring field is, by default, generated as '@timestamp' but since
-    # that is illegal in python we convert the name over to 'datestring'. Using
-    # an aliased Field.
-    # The '@timestamp' key is necessary for logstash, which we support, so we
-    # cannot update the formatter that creates the '@timestamp' key.
-    datestring: datetime = Field(
-        serialization_alias="datestring", validation_alias=AliasChoices("@timestamp", "datestring")
-    )
+    # The datestring field is serialized as '@timestamp' (see serialize_model below),
+    # which is the conventional key used by logstash and the rest of ETOS. It is named
+    # 'datestring' in python since '@timestamp' is not a valid identifier, and both
+    # '@timestamp' and 'datestring' are accepted as input aliases.
+    datestring: datetime = Field(validation_alias=AliasChoices("@timestamp", "datestring"))
+
+    @model_serializer(mode="wrap")
+    def serialize_model(self, handler):
+        """Serialize the log, emitting the timestamp under the '@timestamp' key."""
+        data = handler(self)
+        if "datestring" in data:
+            data["@timestamp"] = data.pop("datestring")
+        return data
 
 
 class Conclusion(Enum):
